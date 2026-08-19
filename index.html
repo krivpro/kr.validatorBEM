@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="dark">
+    <meta name="theme-color" content="#050507">
+    <title>kr.validatorBEM</title>
+    <meta name="description" content="Проверка CSS-классов: латиница, английский без транслита, БЭМ.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap">
+    <link rel="stylesheet" href="css/style.css">
+  </head>
+  <body class="page">
+    <a class="skip" href="#form">К содержимому</a>
+
+    <header class="topbar">
+      <div class="topbar__inner">
+        <h1 class="topbar__title">
+          <span class="topbar__mark" aria-hidden="true"></span>
+          <span class="topbar__name"><span class="topbar__prefix">kr.</span>validatorBEM</span>
+        </h1>
+        <p class="topbar__shortcut">
+          <kbd class="kbd">Ctrl</kbd>
+          <span class="topbar__plus" aria-hidden="true">+</span>
+          <kbd class="kbd">Enter</kbd>
+        </p>
+      </div>
+    </header>
+
+    <main class="page__main">
+      <div class="workspace">
+        <form class="editor" id="form">
+          <div class="editor__panes">
+            <section class="pane">
+              <div class="pane__head">
+                <label class="pane__label" for="html-input">HTML</label>
+                <label class="pane__file">
+                  <svg class="icon" width="16" height="16" viewBox="0 0 256 256" aria-hidden="true" focusable="false">
+                    <path fill="currentColor" d="M224 152v56a16 16 0 0 1-16 16H48a16 16 0 0 1-16-16v-56a8 8 0 0 1 16 0v56h160v-56a8 8 0 0 1 16 0Zm-101.66-18.34a8 8 0 0 0 11.32 0l40-40a8 8 0 0 0-11.32-11.32L136 108.69V40a8 8 0 0 0-16 0v68.69L93.66 82.34a8 8 0 0 0-11.32 11.32Z"/>
+                  </svg>
+                  Загрузить файл
+                  <input id="html-file" class="visually-hidden" type="file" accept=".html,.htm,.xml,text/html">
+                </label>
+              </div>
+              <textarea
+                id="html-input"
+                class="pane__input"
+                spellcheck="false"
+                placeholder='&lt;button class="button button_theme_dark"&gt;'
+              ></textarea>
+              <p class="pane__hint">Вставьте код или перетащите .html</p>
+            </section>
+
+            <section class="pane">
+              <div class="pane__head">
+                <label class="pane__label" for="css-input">CSS</label>
+                <label class="pane__file">
+                  <svg class="icon" width="16" height="16" viewBox="0 0 256 256" aria-hidden="true" focusable="false">
+                    <path fill="currentColor" d="M224 152v56a16 16 0 0 1-16 16H48a16 16 0 0 1-16-16v-56a8 8 0 0 1 16 0v56h160v-56a8 8 0 0 1 16 0Zm-101.66-18.34a8 8 0 0 0 11.32 0l40-40a8 8 0 0 0-11.32-11.32L136 108.69V40a8 8 0 0 0-16 0v68.69L93.66 82.34a8 8 0 0 0-11.32 11.32Z"/>
+                  </svg>
+                  Загрузить файл
+                  <input id="css-file" class="visually-hidden" type="file" accept=".css,text/css">
+                </label>
+              </div>
+              <textarea
+                id="css-input"
+                class="pane__input"
+                spellcheck="false"
+                placeholder=".button__icon--active { }"
+              ></textarea>
+              <p class="pane__hint">Вставьте код или перетащите .css</p>
+            </section>
+          </div>
+
+          <div class="editor__actions">
+            <button class="button button_view_primary" type="submit">
+              <svg class="icon" width="16" height="16" viewBox="0 0 256 256" aria-hidden="true" focusable="false">
+                <path fill="currentColor" d="M232.4 114.49 88.32 26.35a16 16 0 0 0-16.2-.3A15.86 15.86 0 0 0 64 39.87v176.26a15.86 15.86 0 0 0 8.12 13.82 16 16 0 0 0 16.2-.3l144.08-88.14a15.95 15.95 0 0 0 0-27.02Z"/>
+              </svg>
+              Проверить
+            </button>
+            <button class="button" type="reset">Очистить</button>
+          </div>
+        </form>
+
+        <section class="report" id="report" aria-live="polite">
+          <p class="report__placeholder">
+            Вставьте HTML или CSS и нажмите «Проверить». Код никуда не отправляется — всё считается в браузере.
+          </p>
+        </section>
+      </div>
+    </main>
+
+    <script type="module" src="js/app.js"></script>
+  </body>
+</html>
