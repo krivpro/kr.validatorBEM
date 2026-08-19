@@ -41,7 +41,7 @@ test('cyrillic lookalike c is explained', () => {
 
 test('common English words in real class names pass', () => {
   const result = validate({
-    html: '<div class="game-block mini-game-block-title for-mini-game__item-button hero-page__img"></div>',
+    html: '<div class="game-block mini-game-block-title for-mini-game__item-button hero-page__img scrollbar scrollbar__text"></div>',
   });
   assert.equal(
     result.errors.filter((error) => error.rule === 'english' || error.rule === 'translit').length,

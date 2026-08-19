@@ -2,6 +2,7 @@ import { ENGLISH_WORDS } from './english-words.js';
 
 const EXTRA = [
   'topbar',
+  'scrollbar',
   'workspace',
   'visually',
   'shortcut',
