@@ -5,6 +5,7 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { extractFromCss, extractFromHtml } from '../js/engine/extract.js';
 import { validate } from '../js/engine/validate.js';
+import { highlightCode } from '../js/editor.js';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -253,4 +254,14 @@ test('this project UI uses valid BEM class names', () => {
     result.errors.map((error) => `${error.className} [${error.rule}] ${error.message}`),
     [],
   );
+});
+
+test('code highlighter marks tags and escapes html', () => {
+  const html = highlightCode('<div class="knopka"></div>\n.button { color: red; }');
+  assert.equal(html.includes('<div'), false);
+  assert.match(html, /pane__token_tag/);
+  assert.match(html, /pane__token_attribute/);
+  assert.match(html, /pane__token_string/);
+  assert.match(html, /pane__token_selector/);
+  assert.match(html, /pane__token_property/);
 });

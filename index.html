@@ -45,12 +45,23 @@
                 <input id="code-file" class="visually-hidden" type="file" accept=".html,.htm,.xml,.css,text/html,text/css" multiple>
               </label>
             </div>
-            <textarea
-              id="code-input"
-              class="pane__input"
-              spellcheck="false"
-              placeholder='&lt;button class="button button_theme_dark"&gt;&#10;&#10;.button__icon--active { }'
-            ></textarea>
+            <div class="pane__body">
+              <div class="pane__lines" aria-hidden="true"></div>
+              <div class="pane__code">
+                <pre class="pane__highlight" aria-hidden="true"></pre>
+                <textarea
+                  id="code-input"
+                  class="pane__input"
+                  spellcheck="false"
+                  autocomplete="off"
+                  autocapitalize="off"
+                  autocorrect="off"
+                  wrap="off"
+                  rows="18"
+                  placeholder='&lt;button class="button button_theme_dark"&gt;&#10;&#10;.button__icon--active { }'
+                ></textarea>
+              </div>
+            </div>
             <p class="pane__hint">Вставьте HTML, CSS или оба сразу — можно перетащить .html и .css</p>
           </section>
 

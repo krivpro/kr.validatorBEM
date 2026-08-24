@@ -1,9 +1,11 @@
+import { attachEditor } from './editor.js';
 import { validate } from './engine/validate.js';
 
 const form = document.querySelector('#form');
 const codeInput = document.querySelector('#code-input');
 const codeFile = document.querySelector('#code-file');
 const report = document.querySelector('#report');
+const editor = attachEditor(codeInput);
 
 const RULE_LABELS = {
   latin: 'Латиница',
@@ -38,7 +40,7 @@ function renderMessage(error) {
 }
 
 function renderReport(result) {
-  if (!codeInput.value.trim()) {
+  if (!editor.getValue().trim()) {
     report.innerHTML =
       '<p class="report__placeholder">Вставьте HTML или CSS и нажмите «Проверить».</p>';
     return;
@@ -106,7 +108,7 @@ function plural(n, one, few, many) {
 }
 
 function runValidation() {
-  const result = validate({ source: codeInput.value });
+  const result = validate({ source: editor.getValue() });
   renderReport(result);
 }
 
@@ -123,11 +125,11 @@ async function applyFiles(files) {
   const list = [...files].filter(Boolean);
   if (!list.length) return;
   const texts = await Promise.all(list.map((file) => readFile(file)));
-  codeInput.value = texts.filter((text) => text.length).join('\n\n');
+  editor.setValue(texts.filter((text) => text.length).join('\n\n'));
 }
 
 function bindDrop(pane) {
-  const zone = pane.querySelector('.pane__input');
+  const zone = pane.querySelector('.pane__body');
 
   const on = () => pane.classList.add('pane_drop');
   const off = () => pane.classList.remove('pane_drop');
@@ -152,6 +154,7 @@ form.addEventListener('submit', (event) => {
 
 form.addEventListener('reset', () => {
   window.setTimeout(() => {
+    editor.sync();
     report.innerHTML =
       '<p class="report__placeholder">Вставьте HTML или CSS и нажмите «Проверить».</p>';
   }, 0);

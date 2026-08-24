@@ -175,10 +175,9 @@ body {
 
 .workspace {
   display: flex;
-  flex: 1 1 auto;
+  flex: 1 0 auto;
   flex-direction: column;
   min-width: 0;
-  min-height: 0;
   overflow: hidden;
   border: 1px solid var(--color-border);
   border-radius: var(--radius);
@@ -188,18 +187,15 @@ body {
 
 .editor {
   display: flex;
-  flex: 1 1 auto;
+  flex: 0 0 auto;
   flex-direction: column;
-  min-height: 0;
   margin: 0;
 }
 
 .pane {
   display: flex;
-  flex: 1 1 auto;
-  min-width: 0;
-  min-height: 0;
   flex-direction: column;
+  min-width: 0;
   background: var(--color-editor);
 }
 
@@ -252,18 +248,88 @@ body {
   outline-offset: 2px;
 }
 
-.pane__input {
+.pane__body {
+  display: flex;
   width: 100%;
-  flex: 1 1 auto;
-  min-height: 220px;
-  padding: 16px 18px 8px;
-  border: 0;
-  background: transparent;
-  color: #e7e7ea;
+  height: 420px;
+  min-width: 0;
+  min-height: 240px;
+  overflow: hidden;
+  resize: vertical;
+}
+
+.pane__lines {
+  flex: 0 0 auto;
+  height: 100%;
+  margin: 0;
+  padding: 16px 10px 8px 12px;
+  overflow: hidden;
+  border-right: 1px solid var(--color-border);
+  background: #070709;
+  color: #4a4a55;
   font-family: var(--font-mono);
   font-size: 0.84rem;
   line-height: 1.65;
-  resize: vertical;
+  text-align: right;
+  user-select: none;
+  cursor: default;
+}
+
+.pane__line {
+  display: block;
+  height: 1.65em;
+}
+
+.pane__line_active {
+  color: #9a9aa8;
+}
+
+.pane__code {
+  position: relative;
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 0;
+  height: 100%;
+}
+
+.pane__highlight,
+.pane__input {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 16px 18px 8px;
+  border: 0;
+  font-family: var(--font-mono);
+  font-size: 0.84rem;
+  line-height: 1.65;
+  letter-spacing: 0;
+  tab-size: 2;
+  font-variant-ligatures: none;
+  white-space: pre;
+  overflow-wrap: normal;
+  word-wrap: normal;
+}
+
+.pane__highlight {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  color: #e7e7ea;
+  background: transparent;
+}
+
+.pane__input {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 100%;
+  resize: none;
+  overflow: auto;
+  background: transparent;
+  color: transparent;
+  caret-color: #e7e7ea;
 }
 
 .pane__input::placeholder {
@@ -272,7 +338,48 @@ body {
 
 .pane__input:focus {
   outline: none;
-  box-shadow: inset 0 0 0 1px rgba(125, 211, 252, 0.45);
+  box-shadow: none;
+}
+
+.pane__input::selection {
+  background: rgba(125, 211, 252, 0.28);
+  color: transparent;
+}
+
+.pane__token_comment {
+  color: #6d6d7a;
+}
+
+.pane__token_tag {
+  color: #6ecbff;
+}
+
+.pane__token_attribute {
+  color: #c4b5fd;
+}
+
+.pane__token_string {
+  color: var(--color-accent);
+}
+
+.pane__token_selector {
+  color: #7dffb0;
+}
+
+.pane__token_property {
+  color: #7dd3fc;
+}
+
+.pane__token_number {
+  color: #ffb020;
+}
+
+.pane__token_keyword {
+  color: #f9a8d4;
+}
+
+.pane__token_mark {
+  color: #8a8a96;
 }
 
 .pane_drop {
@@ -511,8 +618,9 @@ body {
     padding-bottom: 16px;
   }
 
-  .pane__input {
-    min-height: 180px;
+  .pane__body {
+    height: 280px;
+    min-height: 200px;
   }
 
   .report {
