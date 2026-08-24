@@ -1,9 +1,14 @@
-import { extractFromCss, extractFromHtml, walkHtml } from './extract.js';
+import { extractFromCss, extractFromHtml, maskNonCss, walkHtml } from './extract.js';
 import { checkBem, checkBemDom } from './rules/bem.js';
 import { checkEnglish } from './rules/english.js';
 import { checkLatin, isJsHook } from './rules/latin.js';
 
-export function validate({ html = '', css = '' } = {}) {
+export function validate({ html = '', css = '', source = '' } = {}) {
+  if (source) {
+    html = source;
+    css = maskNonCss(source);
+  }
+
   const items = [...extractFromHtml(html, 'html'), ...extractFromCss(css, 'css')];
   const errors = [];
 

@@ -208,6 +208,43 @@ test('modifier with owner class on the same tag passes BEM structure', () => {
   );
 });
 
+test('html and css from one mixed source are both checked', () => {
+  const source = `<div class="knopka"></div>\n.header__el__icon { color: red; }`;
+  const result = validate({ source });
+  assert.ok(
+    result.errors.some(
+      (error) => error.className === 'knopka' && error.rule === 'translit' && error.file === 'html',
+    ),
+  );
+  assert.ok(
+    result.errors.some(
+      (error) => error.className === 'header__el__icon' && error.rule === 'bem' && error.file === 'css',
+    ),
+  );
+});
+
+test('class names in html text are not treated as css selectors', () => {
+  const result = validate({
+    source: '<p class="text">use .hidden helper</p>',
+  });
+  assert.equal(
+    result.errors.filter((error) => error.className === 'hidden').length,
+    0,
+  );
+  assert.ok(result.total >= 1);
+});
+
+test('css inside style tags is checked in mixed source', () => {
+  const result = validate({
+    source: '<div class="box"></div><style>.box__el__icon { color: red; }</style>',
+  });
+  assert.ok(
+    result.errors.some(
+      (error) => error.className === 'box__el__icon' && error.rule === 'bem' && error.file === 'css',
+    ),
+  );
+});
+
 test('this project UI uses valid BEM class names', () => {
   const html = readFileSync(join(root, 'index.html'), 'utf8');
   const css = readFileSync(join(root, 'css/style.css'), 'utf8');
