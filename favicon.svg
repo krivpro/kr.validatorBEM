@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="kr.validatorBEM">
+  <rect width="32" height="32" rx="8" fill="#050507"/>
+  <rect x="0.75" y="0.75" width="30.5" height="30.5" rx="7.25" fill="#0b0b10" stroke="#fff" stroke-opacity=".14"/>
+  <circle cx="16" cy="17" r="9" fill="#3dff8b" fill-opacity=".16"/>
+  <path
+    d="M9.8 16.6 13.9 21.1 22.4 11.4"
+    fill="none"
+    stroke="#3dff8b"
+    stroke-width="2.7"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+</svg>

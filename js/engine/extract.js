@@ -174,6 +174,105 @@ export function walkHtml(html, file = 'html') {
   return nodes;
 }
 
+export function maskNonCss(source) {
+  if (!source) return '';
+  const html = blankComments(source);
+  const chars = html.split('');
+  const n = html.length;
+  let i = 0;
+  const stack = [];
+
+  const spaceRange = (from, to) => {
+    for (let k = from; k < to && k < n; k += 1) {
+      if (chars[k] !== '\n') chars[k] = ' ';
+    }
+  };
+
+  const keepText = () => stack.length === 0 || stack[stack.length - 1] === 'style';
+
+  while (i < n) {
+    const lt = html.indexOf('<', i);
+    if (lt === -1) {
+      if (!keepText()) spaceRange(i, n);
+      break;
+    }
+
+    if (lt > i && !keepText()) spaceRange(i, lt);
+
+    i = lt + 1;
+    if (i >= n) {
+      spaceRange(lt, n);
+      break;
+    }
+
+    if (html.startsWith('!--', i)) {
+      const end = html.indexOf('-->', i);
+      const tagEnd = end === -1 ? n : end + 3;
+      spaceRange(lt, tagEnd);
+      i = tagEnd;
+      continue;
+    }
+
+    if (html[i] === '!' || html[i] === '?') {
+      const end = html.indexOf('>', i);
+      const tagEnd = end === -1 ? n : end + 1;
+      spaceRange(lt, tagEnd);
+      i = tagEnd;
+      continue;
+    }
+
+    const isClose = html[i] === '/';
+    if (isClose) i += 1;
+
+    const nameStart = i;
+    while (i < n && /[A-Za-z0-9:-]/.test(html[i])) i += 1;
+    const tag = html.slice(nameStart, i).toLowerCase();
+    if (!tag) {
+      i = lt + 1;
+      continue;
+    }
+
+    while (i < n) {
+      const ch = html[i];
+      if (ch === '"' || ch === "'") {
+        i = readQuoted(html, i);
+        continue;
+      }
+      if (ch === '>') break;
+      i += 1;
+    }
+    const tagEnd = i < n ? i + 1 : i;
+    const tagText = html.slice(lt, tagEnd);
+    const selfClosing = /\/\s*>$/.test(tagText) || VOID_TAGS.has(tag);
+
+    spaceRange(lt, tagEnd);
+    i = tagEnd;
+
+    if (isClose) {
+      for (let s = stack.length - 1; s >= 0; s -= 1) {
+        if (stack[s] === tag) {
+          stack.length = s;
+          break;
+        }
+      }
+      continue;
+    }
+
+    if (RAW_TAGS.has(tag) && tag !== 'style' && !selfClosing) {
+      const close = skipRawBlock(html, i, tag);
+      spaceRange(i, close);
+      i = close;
+      continue;
+    }
+
+    if (!selfClosing) {
+      stack.push(tag);
+    }
+  }
+
+  return chars.join('');
+}
+
 const SELECTOR_STOP = /[\s.#\[\]:,>+~(){}/@]/;
 const GROUPING_AT = /^(media|supports|layer|container|scope|document|starting-style)$/i;
 

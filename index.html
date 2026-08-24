@@ -7,6 +7,8 @@
     <meta name="theme-color" content="#050507">
     <title>kr.validatorBEM</title>
     <meta name="description" content="Проверка CSS-классов: латиница, английский без транслита, БЭМ.">
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="favicon.svg">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap">
@@ -32,47 +34,25 @@
     <main class="page__main">
       <div class="workspace">
         <form class="editor" id="form">
-          <div class="editor__panes">
-            <section class="pane">
-              <div class="pane__head">
-                <label class="pane__label" for="html-input">HTML</label>
-                <label class="pane__file">
-                  <svg class="icon" width="16" height="16" viewBox="0 0 256 256" aria-hidden="true" focusable="false">
-                    <path fill="currentColor" d="M224 152v56a16 16 0 0 1-16 16H48a16 16 0 0 1-16-16v-56a8 8 0 0 1 16 0v56h160v-56a8 8 0 0 1 16 0Zm-101.66-18.34a8 8 0 0 0 11.32 0l40-40a8 8 0 0 0-11.32-11.32L136 108.69V40a8 8 0 0 0-16 0v68.69L93.66 82.34a8 8 0 0 0-11.32 11.32Z"/>
-                  </svg>
-                  Загрузить файл
-                  <input id="html-file" class="visually-hidden" type="file" accept=".html,.htm,.xml,text/html">
-                </label>
-              </div>
-              <textarea
-                id="html-input"
-                class="pane__input"
-                spellcheck="false"
-                placeholder='&lt;button class="button button_theme_dark"&gt;'
-              ></textarea>
-              <p class="pane__hint">Вставьте код или перетащите .html</p>
-            </section>
-
-            <section class="pane">
-              <div class="pane__head">
-                <label class="pane__label" for="css-input">CSS</label>
-                <label class="pane__file">
-                  <svg class="icon" width="16" height="16" viewBox="0 0 256 256" aria-hidden="true" focusable="false">
-                    <path fill="currentColor" d="M224 152v56a16 16 0 0 1-16 16H48a16 16 0 0 1-16-16v-56a8 8 0 0 1 16 0v56h160v-56a8 8 0 0 1 16 0Zm-101.66-18.34a8 8 0 0 0 11.32 0l40-40a8 8 0 0 0-11.32-11.32L136 108.69V40a8 8 0 0 0-16 0v68.69L93.66 82.34a8 8 0 0 0-11.32 11.32Z"/>
-                  </svg>
-                  Загрузить файл
-                  <input id="css-file" class="visually-hidden" type="file" accept=".css,text/css">
-                </label>
-              </div>
-              <textarea
-                id="css-input"
-                class="pane__input"
-                spellcheck="false"
-                placeholder=".button__icon--active { }"
-              ></textarea>
-              <p class="pane__hint">Вставьте код или перетащите .css</p>
-            </section>
-          </div>
+          <section class="pane">
+            <div class="pane__head">
+              <label class="pane__label" for="code-input">HTML / CSS</label>
+              <label class="pane__file">
+                <svg class="icon" width="16" height="16" viewBox="0 0 256 256" aria-hidden="true" focusable="false">
+                  <path fill="currentColor" d="M224 152v56a16 16 0 0 1-16 16H48a16 16 0 0 1-16-16v-56a8 8 0 0 1 16 0v56h160v-56a8 8 0 0 1 16 0Zm-101.66-18.34a8 8 0 0 0 11.32 0l40-40a8 8 0 0 0-11.32-11.32L136 108.69V40a8 8 0 0 0-16 0v68.69L93.66 82.34a8 8 0 0 0-11.32 11.32Z"/>
+                </svg>
+                Загрузить файлы
+                <input id="code-file" class="visually-hidden" type="file" accept=".html,.htm,.xml,.css,text/html,text/css" multiple>
+              </label>
+            </div>
+            <textarea
+              id="code-input"
+              class="pane__input"
+              spellcheck="false"
+              placeholder='&lt;button class="button button_theme_dark"&gt;&#10;&#10;.button__icon--active { }'
+            ></textarea>
+            <p class="pane__hint">Вставьте HTML, CSS или оба сразу — можно перетащить .html и .css</p>
+          </section>
 
           <div class="editor__actions">
             <button class="button button_view_primary" type="submit">
@@ -87,7 +67,7 @@
 
         <section class="report" id="report" aria-live="polite">
           <p class="report__placeholder">
-            Вставьте HTML или CSS и нажмите «Проверить». Код никуда не отправляется — всё считается в браузере.
+            Вставьте HTML или CSS и нажмите «Проверить».
           </p>
         </section>
       </div>

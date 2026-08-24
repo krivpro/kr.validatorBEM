@@ -1,10 +1,8 @@
 import { validate } from './engine/validate.js';
 
 const form = document.querySelector('#form');
-const htmlInput = document.querySelector('#html-input');
-const cssInput = document.querySelector('#css-input');
-const htmlFile = document.querySelector('#html-file');
-const cssFile = document.querySelector('#css-file');
+const codeInput = document.querySelector('#code-input');
+const codeFile = document.querySelector('#code-file');
 const report = document.querySelector('#report');
 
 const RULE_LABELS = {
@@ -40,7 +38,7 @@ function renderMessage(error) {
 }
 
 function renderReport(result) {
-  if (!htmlInput.value.trim() && !cssInput.value.trim()) {
+  if (!codeInput.value.trim()) {
     report.innerHTML =
       '<p class="report__placeholder">Вставьте HTML или CSS и нажмите «Проверить».</p>';
     return;
@@ -108,10 +106,7 @@ function plural(n, one, few, many) {
 }
 
 function runValidation() {
-  const result = validate({
-    html: htmlInput.value,
-    css: cssInput.value,
-  });
+  const result = validate({ source: codeInput.value });
   renderReport(result);
 }
 
@@ -124,20 +119,14 @@ function readFile(file) {
   });
 }
 
-function isCssFile(file) {
-  return /\.css$/i.test(file.name) || file.type === 'text/css';
+async function applyFiles(files) {
+  const list = [...files].filter(Boolean);
+  if (!list.length) return;
+  const texts = await Promise.all(list.map((file) => readFile(file)));
+  codeInput.value = texts.filter((text) => text.length).join('\n\n');
 }
 
-async function applyFile(file, target) {
-  const text = await readFile(file);
-  if (target === 'css' || isCssFile(file)) {
-    cssInput.value = text;
-  } else {
-    htmlInput.value = text;
-  }
-}
-
-function bindDrop(pane, target) {
+function bindDrop(pane) {
   const zone = pane.querySelector('.pane__input');
 
   const on = () => pane.classList.add('pane_drop');
@@ -151,8 +140,8 @@ function bindDrop(pane, target) {
   zone.addEventListener('drop', async (event) => {
     event.preventDefault();
     off();
-    const file = event.dataTransfer?.files?.[0];
-    if (file) await applyFile(file, target);
+    const files = event.dataTransfer?.files;
+    if (files?.length) await applyFiles(files);
   });
 }
 
@@ -164,24 +153,16 @@ form.addEventListener('submit', (event) => {
 form.addEventListener('reset', () => {
   window.setTimeout(() => {
     report.innerHTML =
-      '<p class="report__placeholder">Вставьте HTML или CSS и нажмите «Проверить». Код никуда не отправляется — всё считается в браузере.</p>';
+      '<p class="report__placeholder">Вставьте HTML или CSS и нажмите «Проверить».</p>';
   }, 0);
 });
 
-htmlFile.addEventListener('change', async () => {
-  const file = htmlFile.files?.[0];
-  if (file) await applyFile(file, 'html');
-  htmlFile.value = '';
+codeFile.addEventListener('change', async () => {
+  if (codeFile.files?.length) await applyFiles(codeFile.files);
+  codeFile.value = '';
 });
 
-cssFile.addEventListener('change', async () => {
-  const file = cssFile.files?.[0];
-  if (file) await applyFile(file, 'css');
-  cssFile.value = '';
-});
-
-bindDrop(htmlInput.closest('.pane'), 'html');
-bindDrop(cssInput.closest('.pane'), 'css');
+bindDrop(codeInput.closest('.pane'));
 
 document.addEventListener('keydown', (event) => {
   if ((event.ctrlKey || event.metaKey) && event.key === 'Enter') {
